@@ -1,0 +1,21 @@
+<template>
+    <view class="cntloading">
+      {{ text || '加载中...' }}
+      <view>
+        <text class="cl1"></text>
+        <text class="cl2"></text>
+        <text class="cl3"></text>
+      </view>
+    </view>
+</template>
+  
+<script>
+export default {
+  props: {
+    text: {
+      type: String,
+      default: ''
+    }
+  }
+}
+</script>

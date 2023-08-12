@@ -1,4 +1,4 @@
-# koala-vedio
+# sean-vedio
 
 ## Project setup
 ```
