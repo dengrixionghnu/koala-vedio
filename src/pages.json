@@ -1,15 +1,15 @@
 {
-	"pages": [
+	"pages": [ 
 		{
 			"path": "pages/music/index",
 			"style": {
-				"navigationBarTitleText": "音乐"
+				"navigationBarTitleText": "考拉音乐"
 			}
 		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "考拉娱乐",
+		"navigationBarTitleText": "考拉音乐",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	}
