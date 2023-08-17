@@ -30,7 +30,7 @@
 <script lang="ts" setup>
 import SectionFrame from './SectionFrame.vue'
 import SectionFrameScroll from './SectionFramePlaylistScroll.vue'
-import SectionFrameItem from '.SectionFramePlaylistItem.vue'
+import SectionFrameItem from './SectionFramePlaylistItem.vue'
 
     const props = defineProps<{
     // 分区标题
