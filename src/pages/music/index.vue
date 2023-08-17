@@ -220,16 +220,124 @@
 </template>
 
 <script lang="ts" setup>
-import TheNavBar from '@/components/TheNavBar.vue'
-import ThePlayerBottomBar from '@/components/ThePlayerBottomBar.vue'
-import SectionBanner from '@/components/section/SectionBanner.vue'
-import SectionActionBall from '@/components/section/SectionActionBall.vue'
-import SectionPlaylist from '@/components/section/SectionPlaylist.vue'
-import SectionSonglist from '@/components/section/SectionSonglist.vue'
-import SectionTopic from '@/components/section/SectionTopic.vue'
-import SectionTablist from '@/components/section/SectionTablist.vue'
-import SectionMusicCalendar from '@/components/section/SectionMusicCalendar.vue'
+import TheNavBar from '../../components/TheNavBar.vue'
+import ThePlayerBottomBar from '../../components/ThePlayerBottomBar.vue'
+import SectionBanner from '../../components/section/SectionBanner.vue'
+import SectionActionBall from '../../components/section/SectionActionBall.vue'
+import SectionPlaylist from '../../components/section/SectionPlaylist.vue'
+import SectionSonglist from '../../components/section/SectionSonglist.vue'
+import SectionTopic from '../../components/section/SectionTopic.vue'
+import SectionTablist from '../../components/section/SectionTablist.vue'
+import SectionMusicCalendar from '../../components/section/SectionMusicCalendar.vue'
+import { onPullDownRefresh, onReachBottom, onShow } from '@dcloudio/uni-app'
+import { reactive, computed, toRaw } from 'vue'
+import { mainUserStore as useStore } from '../../common/store/index'
+import { getActionBtn, getHomePageHandler } from '../../common/requestHandler'
 
+const store = useStore()
+const data = reactive<any>({
+  loading: true,
+  offset: 0,
+  more: true,
+  // 是否正在请求所有数据，防止onReachBottom多次触发
+  getAllData: false,
+  // 获取的原始blocks数据
+  blocks: [],
+  /**
+   * 主页action按钮
+   */
+  actionBall: []
+})
+
+const homePageConfig = store.getHomePageConfig
+
+// 下拉刷新
+onPullDownRefresh(() => {
+  uni.vibrateShort({
+    fail: () => {}
+  })
+  Object.assign(data, {
+    offset: 0,
+    more: true
+  })
+  init()
+})
+
+// 触底加载
+onReachBottom(() => {
+  uni.vibrateShort({
+    fail: () => {}
+  })
+  if (!data.getAllData) {
+    getAllData()
+  }
+})
+
+onShow(() => {
+  store.setTheme('raw')
+})
+
+init()
+// 加载首屏数据
+function init() {
+  uni.showLoading({
+    title: '加载中',
+    mask: true
+  })
+
+  store.getHomePage(data.offset).then((res: any) => {
+    store.getHomeBall().then(res => (data.actionBall = getActionBtn(res)))
+    data.more = res.more
+    data.offset = res.offset
+
+    const homePageRes = getHomePageHandler(res.data)
+    const homePageResKeys = Object.keys(homePageRes)
+
+    Object.keys(homePageConfig).forEach((key: string) => {
+      if (homePageResKeys.includes(homePageConfig[key]?.code) && !homePageConfig[key].disable) {
+        data[key] = Object.assign(homePageConfig[key], homePageRes[key])
+      }
+    })
+
+    uni.hideLoading()
+    uni.stopPullDownRefresh()
+  })
+}
+
+async function getAllData() {
+  data.getAllData = true
+  const res: any = await store.getHomePage(data.offset)
+  data.more = res.more
+  data.offset = res.offset
+  data.blocks.push(...res.data)
+  if (data.more) {
+    // 还有更多，继续加载
+    getAllData()
+  } else {
+    // 加载完了全部
+    const homePageRes = getHomePageHandler(toRaw(data.blocks))
+    const homePageResKeys = Object.keys(homePageRes)
+
+    Object.keys(homePageConfig).forEach((key: string) => {
+      if (homePageResKeys.includes(homePageConfig[key]?.code) && !homePageConfig[key].disable) {
+        data[key] = Object.assign(homePageConfig[key], homePageRes[key])
+      }
+    })
+
+    uni.hideLoading()
+    data.blocks = []
+    data.loading = false
+  }
+}
+
+// 推荐歌单查看更多-前往歌单广告
+function rcmdToMore() {
+  uni.navigateTo({ url: '../explore/playlist' })
+}
+
+const pageStyle = computed(() => {
+  return store.getPageMetaStyle
+})
 
 
 

@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { getAudio, setInfo } from '@/common/audio'
 import { getRandomIndex } from '@/common/util'
 import { useStore} from './userStore'
-import { Song } from '../../types'
+import type { Song } from '../../types'
 
 type PlayerStatus = {
     /**

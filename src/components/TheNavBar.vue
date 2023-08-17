@@ -23,9 +23,9 @@
 <script lang="ts" setup>
 
 import { computed } from 'vue'
-import { useStore } from '@/store'
+import { mainUserStore } from '../common/store/index'
 
-const store = useStore()
+const store = mainUserStore()
 const props = defineProps<{
   // 是否显示返回按钮
   back: boolean
