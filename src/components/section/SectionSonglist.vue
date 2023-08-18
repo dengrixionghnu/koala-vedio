@@ -51,7 +51,7 @@
 
 <script lang="ts" setup>
 import SectionFrame from './SectionFrame.vue'
-import { usePlayerStore as usePlayerStore } from '../../common/store/userPlayer'
+import usePlayerStore from '../../common/store/userPlayer'
 
 const playerStore = usePlayerStore()
 const props = defineProps<{

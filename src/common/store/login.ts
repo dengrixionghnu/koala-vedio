@@ -1,8 +1,8 @@
-import { defineStore } from 'pinia'
+import { createStore } from 'vuex';
 import { get } from '@/common/apiHttp'
 import apiConfig from '@/common/apiConfig'
 
-export const loginUserStore = defineStore('login', {
+const loginStore = createStore({
     state: () => {
       return {
         // 手机
@@ -42,3 +42,6 @@ export const loginUserStore = defineStore('login', {
       }
     }
   })
+
+
+export default loginStore;

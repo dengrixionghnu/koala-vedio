@@ -1,10 +1,13 @@
-import { defineStore } from 'pinia'
+import { createStore } from 'vuex';
+
+
 import apiConfig from '@/common/apiConfig'
 import { get } from '@/common/apiHttp'
 import { convertCount, pickUpName } from '@/common/util'
 import type { Playlist, Song, Theme } from '../../types'
 import moment from 'moment'
 import homePageConfigRaw from '@/common/homePageConfig'
+
 
 
 const dark: Theme = {
@@ -36,7 +39,7 @@ const light: Theme = {
 Object.freeze(dark)
 Object.freeze(light)
 
-export const mainUserStore = defineStore('main', {
+const userMainStore = createStore({
     state: () => {
         return {
           // 是否防止滚动穿透
@@ -79,8 +82,7 @@ export const mainUserStore = defineStore('main', {
           } as any
         }
       },
-      getters: {
-
+    actions:{
             getPageMetaStyle(): string {
                 const systemInfo = uni.getSystemInfoSync()
                 const statusBarHeight = systemInfo.statusBarHeight === 0 ? 10 : systemInfo.statusBarHeight
@@ -114,9 +116,7 @@ export const mainUserStore = defineStore('main', {
                 }
         
                 return homePageConfig
-            }
-    },
-    actions:{
+            },
                 /**
              *
              * @param theme raw表示主题不变，但是重新执行以下setTabBarStyle、setBackgroundColor....
@@ -554,3 +554,9 @@ export const mainUserStore = defineStore('main', {
     }
 
 })
+
+
+export default userMainStore;
+  
+
+

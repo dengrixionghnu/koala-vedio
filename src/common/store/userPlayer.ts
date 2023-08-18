@@ -1,7 +1,7 @@
-import { defineStore } from 'pinia'
+import { createStore } from 'vuex';
 import { getAudio, setInfo } from '@/common/audio'
 import { getRandomIndex } from '@/common/util'
-import { useStore} from './userStore'
+import useStore from './userStore'
 import type { Song } from '../../types'
 
 type PlayerStatus = {
@@ -35,7 +35,9 @@ const playerInfoStorage = uni.getStorageSync('playerInfo')
 const playerStatusStorage = uni.getStorageSync('playerStatus')
 const playerQueueStorage = uni.getStorageSync('playerQueue')
 
-export const usePlayerStore = defineStore('player', {
+
+const userPlayerStore = createStore({
+
     state: () => {
       return {
         /**
@@ -265,4 +267,6 @@ export const usePlayerStore = defineStore('player', {
       }
     }
   })
+
+  export default userPlayerStore;
   

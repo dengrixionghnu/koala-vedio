@@ -1,11 +1,11 @@
-import { defineStore } from 'pinia'
+import { createStore } from 'vuex';
 import { get } from '@/common/apiHttp'
 import apiConfig from '@/common/apiConfig'
 import moment from 'moment'
 import type { UserInfo } from '../../types'
 
 
-export const useStore = defineStore('user', {
+var userStore = createStore({
     state: () => {
                 return {
                     userId: 0,
@@ -211,3 +211,5 @@ export const useStore = defineStore('user', {
             }
     }
 })
+
+export default userStore;

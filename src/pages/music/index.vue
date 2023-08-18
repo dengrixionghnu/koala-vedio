@@ -231,10 +231,9 @@ import SectionTablist from '../../components/section/SectionTablist.vue'
 import SectionMusicCalendar from '../../components/section/SectionMusicCalendar.vue'
 import { onPullDownRefresh, onReachBottom, onShow } from '@dcloudio/uni-app'
 import { reactive, computed, toRaw } from 'vue'
-import { mainUserStore as useStore } from '../../common/store/index'
+import store from '../../common/store/index'
 import { getActionBtn, getHomePageHandler } from '../../common/requestHandler'
 
-const store = useStore()
 const data = reactive<any>({
   loading: true,
   offset: 0,
