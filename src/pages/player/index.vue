@@ -1,5 +1,5 @@
 <template>
-    <page-meta :page-style="mainStore.getPageMetaStyle" />
+    <page-meta :page-style="systemRepository.getPageMetaStyle()" />
   
     <the-popup-artist />
   
@@ -9,7 +9,7 @@
         :style="{ opacity: backgroundLoad ? '1' : '0' }"
         class="detail-player__bg-image"
         @load="bgLoad"
-        :src="`${playerStore.playerInfo.picUrl}?param=200y200`"
+        :src="`${playerRepository.playerInfo.picUrl}?param=200y200`"
         mode="aspectFill"
       />
   
@@ -22,14 +22,14 @@
           <view class="detail-player__main-nav__back" @tap.stop.prevent="back" />
           <view class="detail-player__main-nav__info">
             <view class="detail-player__main-nav__title text-ellipsis-single">
-              {{ playerStore.playerInfo.title }}
+              {{ playerRepository.playerInfo.title }}
             </view>
   
             <view
               class="detail-player__main-nav__subTitle text-ellipsis-single"
               @tap.stop.prevent="toDetailArtist"
             >
-              {{ playerStore.playerInfo.artist }}
+              {{ playerRepository.playerInfo.artist }}
             </view>
           </view>
           <view class="detail-player__main-nav__search"></view>
@@ -63,10 +63,10 @@
               <view class="icon-prev icon" />
             </view>
   
-            <template v-if="!playerStore.loading">
+            <template v-if="!playerRepository.loading">
               <!-- 开始按钮 -->
               <view
-                v-if="playerStore.playerStatus.paused"
+                v-if="playerRepository.playerStatus.paused"
                 @tap.stop.prevent="playerStatusChange"
                 class="detail-player__main-action-opt__common"
               >
@@ -108,13 +108,14 @@
 import ThePopupArtist from '../../components/ThePopupArtist.vue'
 import ThePlayerPoster from '../../components/ThePlayerPoster.vue'
 import ThePlayerQueue from '../../components/ThePlayerQueue.vue'
-import { mainUserStore as useMainStore } from '../../common/store/index'
-import { usePlayerStore as usePlayerStore } from '../../common/store/userPlayer'
+import systemRepository from '../../common/repository/systemRepository'
+import  playerRepository from '../../common/repository/playerRepository'
 import { onLoad } from '@dcloudio/uni-app'
-onst mainStore = useMainStore()
-const playerStore = usePlayerStore()
+import {computed } from 'vue'
+
+
 const playMode = computed(() => {
-  return playerStore.playerStatus.mode || 1
+  return playerRepository.playerStatus.mode || 1
 })
 const pageType = ref<string>('poster')
 
@@ -125,21 +126,21 @@ onLoad((query: any) => {
 
 // 暂停/开始
 function playerStatusChange() {
-  if (playerStore.playerStatus.paused) {
-    playerStore.setPlayerPlay()
+  if (playerRepository.playerStatus.paused) {
+    playerRepository.setPlayerPlay()
   } else {
-    playerStore.setPlayerPause()
+    playerRepository.setPlayerPause()
   }
 }
 
 // 上一首歌
 function playerPrev() {
-  playerStore.setPlayerPrev()
+  playerRepository.setPlayerPrev()
 }
 
 // 下一首
 function playerNext() {
-  playerStore.setPlayerNext()
+  playerRepository.setPlayerNext()
 }
 
 // 切换模式
@@ -153,7 +154,7 @@ function setPlayerMode() {
     icon: 'none',
     duration: 2000
   })
-  playerStore.setPlayerStatus({ mode: currentMode })
+  playerRepository.setPlayerStatus({ mode: currentMode })
 }
 
 // 打开代播列表
@@ -166,7 +167,7 @@ function toQueue() {
 
 // 前往歌手详情页
 function toDetailArtist() {
-  uni.$emit('popupOpen', playerStore.playerInfo.ar)
+  uni.$emit('popupOpen', playerRepository.playerInfo.ar)
 }
 
 // 退出页面

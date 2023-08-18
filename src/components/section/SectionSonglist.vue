@@ -51,9 +51,8 @@
 
 <script lang="ts" setup>
 import SectionFrame from './SectionFrame.vue'
-import usePlayerStore from '../../common/store/userPlayer'
+import playerRepository from '../../common/repository/playerRepository'
 
-const playerStore = usePlayerStore()
 const props = defineProps<{
   // 分区标题
   title: string
@@ -67,7 +66,7 @@ const props = defineProps<{
 
 function tapHandler(e: any) {
   // 添加歌曲信息到播放器
-  playerStore.setPlayerInfo(e.payload)
+  playerRepository.setPlayerInfo(e.payload)
   // 打开播放器
   uni.navigateTo({
     url: `../../pages/player/index?type=poster&payload=${e.payload}`

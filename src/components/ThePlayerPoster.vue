@@ -3,7 +3,7 @@
       <!-- 1. 留声机的唱针-->
       <view
         class="player-page-cd__stylus"
-        :class="{ 'stylus-pause': playerStore.playerStatus.paused }"
+        :class="{ 'stylus-pause': playerRepository.playerStatus.paused }"
       />
   
       <!-- 2. css半透明背景, 可有可无的装饰 -->
@@ -12,10 +12,10 @@
       <!-- 3. 唱片封面，播放时旋转 -->
       <view class="player-page-cd__poster">
         <image
-          v-if="playerStore.playerInfo.picUrl"
+          v-if="playerRepository.playerInfo.picUrl"
           class="player-page-cd__poster-image"
           :style="{ 'animation-play-state': aps }"
-          :src="`${playerStore.playerInfo.picUrl}?param=200y200`"
+          :src="`${playerRepository.playerInfo.picUrl}?param=200y200`"
           mode="aspectFit"
         />
       </view>
@@ -24,7 +24,7 @@
       <view class="player-page-cd__progress">
         <!-- 当前时间 -->
         <view class="player-page-cd__progress-start">
-          {{ timeConver(playerStore.playerStatus.currentTime) }}
+          {{ timeConver(playerRepository.playerStatus.currentTime) }}
         </view>
   
         <!-- 进度条轨道 -->
@@ -44,7 +44,7 @@
   
         <!-- 总时间 -->
         <view class="player-page-cd__progress-end">
-          {{ timeConver(playerStore.playerStatus.duration) }}
+          {{ timeConver(playerRepository.playerStatus.duration) }}
         </view>
       </view>
     </view>
@@ -53,28 +53,28 @@
 <script lang="ts" setup>
 import { computed, ref, onMounted } from 'vue'
 import { durationConvert } from '@/common/util'
-import { usePlayerStore as usePlayerStore } from '../common/store/userPlayer'
+import playerRepository from '../common/repository/playerRepository'
 
 const seeking = ref<boolean>(false)
 const loading = ref<boolean>(true)
-const playerStore = usePlayerStore()
+
 /**
  * 只有在打开了播放器页面时，才开启旋转动画
  */
-const aps = computed(() => (!playerStore.playerStatus.paused ? 'running' : 'paused'))
+const aps = computed(() => (!playerRepository.playerStatus.paused ? 'running' : 'paused'))
 
 /**
  * 调整进度
  */
 function ratioChange(e: any) {
   const ratio = e.detail.value / 100
-  const currentTime = Number(((playerStore.playerInfo.duration / 1000) * ratio).toFixed(2))
-  playerStore.seek(currentTime)
+  const currentTime = Number(((playerRepository.playerInfo.duration / 1000) * ratio).toFixed(2))
+  playerRepository.seek(currentTime)
 }
 
 const ratio = computed(() => {
   const durationRatio =
-    playerStore.playerStatus.currentTime / playerStore.playerStatus.duration || 0
+  playerRepository.playerStatus.currentTime / playerRepository.playerStatus.duration || 0
   return seeking.value ? undefined : Number((durationRatio * 100).toFixed(1))
 })
 

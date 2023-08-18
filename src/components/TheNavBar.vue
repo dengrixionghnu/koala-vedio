@@ -23,9 +23,7 @@
 <script lang="ts" setup>
 
 import { computed } from 'vue'
-import mainUserStore from '../common/store/index'
-
-const store = mainUserStore()
+import systemRepository from '../common/repository/systemRepository'
 
 const props = defineProps<{
   // 是否显示返回按钮
@@ -45,10 +43,10 @@ const filter = computed(() => {
   return props.filter
 })
 const titleColor = computed(() => {
-  return store.getCurTheme.navigationBarColor
+  return systemRepository.getCurTheme().navigationBarColor
 })
 const themeColor = computed(() => {
-  return props.bg ? store.getCurTheme.backgroundColorCard : 'transparent'
+  return props.bg ? systemRepository.getCurTheme().backgroundColorCard : 'transparent'
 })
 const backBtn = computed(() => {
   return typeof props.back === 'boolean' ? props.back : true

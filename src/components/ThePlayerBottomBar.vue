@@ -3,7 +3,7 @@
       class="bottom-bar-player"
       :class="{ 'bottom-safe-area-fixed': !devEnv }"
       @tap.stop.prevent="tapPlayerHandler"
-      v-if="playerStore.playerInfo.payload"
+      v-if="playerRepository.playerInfo.payload"
     >
       <!-- → bottombar播放器 -->
       <view class="bottom-bar-player-spacing">
@@ -11,7 +11,7 @@
         <view class="bottom-bar-player__poster">
           <image
             class="bottom-bar-player__poster-image"
-            :src="`${playerStore.playerInfo.picUrl}?param=100y100`"
+            :src="`${playerRepository.playerInfo.picUrl}?param=100y100`"
             mode="aspectFit"
           />
         </view>
@@ -19,17 +19,17 @@
           <view class="bottom-bar-player__main-info text-ellipsis-single">
             <!-- 标题 -->
             <text class="bottom-bar-player__main-title text-ellipsis-single">
-              {{ playerStore.playerInfo.title }}
+              {{ playerRepository.playerInfo.title }}
             </text>
             <!-- 作者 -->
             <text class="bottom-bar-player__main-artist text-ellipsis-single">
-              &nbsp;-&nbsp;{{ playerStore.playerInfo.artist }}
+              &nbsp;-&nbsp;{{ playerRepository.playerInfo.artist }}
             </text>
           </view>
           <!-- 按钮栏 -->
           <view class="bottom-bar-player__main-action">
             <view
-              v-if="playerStore.playerStatus.paused"
+              v-if="playerRepository.playerStatus.paused"
               @tap.stop.prevent="playSong(true)"
               class="bottom-bar-player__main-action-play"
             />
@@ -48,10 +48,9 @@
 
 <script lang="ts" setup>
 
-import usePlayerStore from '../common/store/userPlayer'
+import playerRepository from '../common/repository/playerRepository'
 import { computed } from 'vue'
 
-const playerStore = usePlayerStore()
 
 function tapPlayerHandler() {
   uni.navigateTo({
@@ -66,7 +65,7 @@ function toQueue() {
 }
 
 function playSong(status: boolean) {
-  !status ? playerStore.setPlayerPause() : playerStore.setPlayerPlay()
+  !status ? playerRepository.setPlayerPause() : playerRepository.setPlayerPlay()
 }
 
 const devEnv = computed(() => uni.getSystemInfoSync().platform === 'devtools')

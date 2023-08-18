@@ -54,16 +54,15 @@
 <script lang="ts" setup>
 import ThePlayerQueueInfinite from './ThePlayerQueueInfinite.vue'
 import { computed, ref } from 'vue'
-import { usePlayerStore as usePlayerStore } from '../common/store/userPlayer'
+import playerRepository from '../common/repository/playerRepository'
 
 const scrollTop = ref<any>(0)
 // 1.代播清单 2.插播
 const queueMode = ref<number>(1)
-const playerStore = usePlayerStore()
 
-const queue = computed(() => playerStore.queue)
+const queue = computed(() => playerRepository.queue)
 const preference = computed(() => {
-  return playerStore.queue.filter(v => v.preference)
+  return playerRepository.queue.filter(v => v.preference)
 })
 
 function scrollHandler(e: any) {
@@ -80,7 +79,7 @@ function clearQueue() {
     confirmColor: '#f9343d',
     success: function (res) {
       if (res.confirm) {
-        playerStore.clearQueue()
+        playerRepository.clearQueue()
       }
     }
   })

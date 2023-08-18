@@ -231,7 +231,7 @@ import SectionTablist from '../../components/section/SectionTablist.vue'
 import SectionMusicCalendar from '../../components/section/SectionMusicCalendar.vue'
 import { onPullDownRefresh, onReachBottom, onShow } from '@dcloudio/uni-app'
 import { reactive, computed, toRaw } from 'vue'
-import store from '../../common/store/index'
+import systemRepositpry from '../../common/repository/systemRepository'
 import { getActionBtn, getHomePageHandler } from '../../common/requestHandler'
 
 const data = reactive<any>({
@@ -248,7 +248,7 @@ const data = reactive<any>({
   actionBall: []
 })
 
-const homePageConfig = store.getHomePageConfig
+const homePageConfig = systemRepositpry.getHomePageConfig();
 
 // 下拉刷新
 onPullDownRefresh(() => {
@@ -273,7 +273,7 @@ onReachBottom(() => {
 })
 
 onShow(() => {
-  store.setTheme('raw')
+  systemRepositpry.setTheme('raw')
 })
 
 init()
@@ -284,8 +284,8 @@ function init() {
     mask: true
   })
 
-  store.getHomePage(data.offset).then((res: any) => {
-    store.getHomeBall().then(res => (data.actionBall = getActionBtn(res)))
+  systemRepositpry.getHomePage(data.offset).then((res: any) => {
+    systemRepositpry.getHomeBall().then(res => (data.actionBall = getActionBtn(res)))
     data.more = res.more
     data.offset = res.offset
 
@@ -305,7 +305,7 @@ function init() {
 
 async function getAllData() {
   data.getAllData = true
-  const res: any = await store.getHomePage(data.offset)
+  const res: any = await systemRepositpry.getHomePage(data.offset)
   data.more = res.more
   data.offset = res.offset
   data.blocks.push(...res.data)
@@ -335,7 +335,7 @@ function rcmdToMore() {
 }
 
 const pageStyle = computed(() => {
-  return store.getPageMetaStyle
+  return systemRepositpry.getPageMetaStyle();
 })
 
 
